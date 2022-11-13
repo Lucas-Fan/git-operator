@@ -2,7 +2,7 @@
  * @Author: fanzy3 fanzy3@asiainfo.com
  * @Date: 2022-11-13 22:08:04
  * @LastEditors: fanzy3 fanzy3@asiainfo.com
- * @LastEditTime: 2022-11-13 22:13:13
+ * @LastEditTime: 2022-11-13 22:19:20
  * @FilePath: /git-operator/function.c
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -43,6 +43,34 @@ void swap(int *a, int *b)
    int temp = *a;
    *a = *b;
    *b = temp;
+}
+
+// 并归排序
+void shellSort()
+{
+
+   int arr[] = {1, 5, 3, 9, 7};
+   int len = 5;
+
+   int gap, i, j;
+   int temp;
+
+   for (gap = len / 2; gap >= 1; gap /= 2) //第一个间隔为len/2,然后不断缩小
+   {
+      for (i = gap; i < len; i++) //对每一个下标大于gap的元素进行遍历(0-(gap-1)是每一个子序列的首个有序表)
+      {
+         temp = arr[i]; //将要插入的值赋值给temp,因为它所处的位置可能被覆盖
+         for (j = i - gap; arr[j] > temp && j >= 0; j -= gap)
+         {                         //i所处的子序列:i  i-gap  i-2gap i-n*gap( i-n*gap  >= 0)
+            arr[j + gap] = arr[j]; //arr[j]若大于要插入的值则将位置后移
+         }
+         arr[j + gap] = temp; //无论是arr[j]<temp还是j<0了,都将temp插入到arr[j]这一个子序列的后一个位置(j+gap)
+      }
+   }
+
+   //打印数组
+   for (int i = 0; i < len; i++)
+      printf("%d\t", arr[i]);
 }
 
 // 快排
