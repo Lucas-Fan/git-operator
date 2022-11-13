@@ -2,7 +2,7 @@
  * @Author: fanzy3 fanzy3@asiainfo.com
  * @Date: 2022-11-13 22:08:04
  * @LastEditors: fanzy3 fanzy3@asiainfo.com
- * @LastEditTime: 2022-11-13 22:23:28
+ * @LastEditTime: 2022-11-13 22:27:07
  * @FilePath: /git-operator/function.c
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -45,35 +45,52 @@ void swap(int *a, int *b)
    *b = temp;
 }
 
-// 并归排序
-void merge_sort(int arr[], int len) {
-    int *a = arr;
-    int *b = (int *) malloc(len * sizeof(int));
-    int seg, start;
-    for (seg = 1; seg < len; seg += seg) {
-        for (start = 0; start < len; start += seg * 2) {
-            int low = start, mid = min(start + seg, len), high = min(start + seg * 2, len);
-            int k = low;
-            int start1 = low, end1 = mid;
-            int start2 = mid, end2 = high;
-            while (start1 < end1 && start2 < end2)
-                b[k++] = a[start1] < a[start2] ? a[start1++] : a[start2++];
-            while (start1 < end1)
-                b[k++] = a[start1++];
-            while (start2 < end2)
-                b[k++] = a[start2++];
-        }
-        int *temp = a;
-        a = b;
-        b = temp;
-    }
-    if (a != arr) {
-        int i;
-        for (i = 0; i < len; i++)
-            b[i] = a[i];
-        b = a;
-    }
-    free(b);
+// 快排
+void quickSort()
+{
+   int arr[10] = {11, 7, 9, 3, 4, 6, 2, 8, 5, 3};
+   quick_sort(arr, 0, 9);
+   for (int i = 0; i < 10; i++)
+      printf("%d\t", arr[i]);
+}
+
+int partition(int arr[], int start, int end)
+{
+   int temp = arr[start];
+   int li = start, ri = end;
+   while (li < ri)
+   {
+      while (li < ri && arr[ri] > temp)
+      {
+         ri--;
+      }
+      if (li < ri)
+      {
+         arr[li] = arr[ri];
+         li++;
+      }
+      while (li < ri && arr[li] < temp)
+      {
+         li++;
+      }
+      if (li < ri)
+      {
+         arr[ri] = arr[li];
+         ri--;
+      }
+   }
+   arr[li] = temp;
+   return li;
+}
+
+void quick_sort(int arr[], int start, int end)
+{
+   if (start < end)
+   {
+      int index = partition(arr, start, end);
+      quick_sort(arr, start, index - 1);
+      quick_sort(arr, index + 1, end);
+   }
 }
 
 // 希尔排序
@@ -106,46 +123,35 @@ void shellSort(int a, int b, int c)
       printf("%d\t", arr[i]);
 }
 
-// 快排
-void quickSort()
-{
-   int arr[10] = {11, 7, 9, 3, 4, 6, 2, 8, 5, 3};
-   quick_sort(arr, 0, 9);
-   for (int i = 0; i < 10; i++)
-      printf("%d\t", arr[i]);
-}
-
-int partition(int arr[], int start, int end)
-{
-   int temp = arr[start];
-   int li = start, ri = end;
-   while (li < ri)
-   {
-      while (li < ri && arr[ri] > temp)
-         ri--;
-      if (li < ri)
-      {
-         arr[li] = arr[ri];
-         li++;
-      }
-      while (li < ri && arr[li] < temp)
-         li++;
-      if (li < ri)
-      {
-         arr[ri] = arr[li];
-         ri--;
-      }
-   }
-   arr[li] = temp;
-   return li;
-}
-
-void quick_sort(int arr[], int start, int end)
-{
-   if (start < end)
-   {
-      int index = partition(arr, start, end);
-      quick_sort(arr, start, index - 1);
-      quick_sort(arr, index + 1, end);
-   }
+// 并归排序
+void merge_sort(int arr[], int len) {
+    int *a = arr;
+    int *b = (int *) malloc(len * sizeof(int));
+    int seg, start;
+    for (seg = 1; seg < len; seg += seg) {
+        for (start = 0; start < len; start += seg * 2) {
+            int low = start;
+            int mid = min(start + seg, len);
+            int high = min(start + seg * 2, len);
+            int k = low;
+            int start1 = low, end1 = mid;
+            int start2 = mid, end2 = high;
+            while (start1 < end1 && start2 < end2)
+                b[k++] = a[start1] < a[start2] ? a[start1++] : a[start2++];
+            while (start1 < end1)
+                b[k++] = a[start1++];
+            while (start2 < end2)
+                b[k++] = a[start2++];
+        }
+        int *temp = a;
+        a = b;
+        b = temp;
+    }
+    if (a != arr) {
+        int i;
+        for (i = 0; i < len; i++)
+            b[i] = a[i];
+        b = a;
+    }
+    free(b);
 }
