@@ -2,7 +2,7 @@
  * @Author: fanzy3 fanzy3@asiainfo.com
  * @Date: 2022-11-13 22:08:04
  * @LastEditors: fanzy3 fanzy3@asiainfo.com
- * @LastEditTime: 2022-11-13 22:21:23
+ * @LastEditTime: 2022-11-13 22:23:28
  * @FilePath: /git-operator/function.c
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -46,6 +46,37 @@ void swap(int *a, int *b)
 }
 
 // 并归排序
+void merge_sort(int arr[], int len) {
+    int *a = arr;
+    int *b = (int *) malloc(len * sizeof(int));
+    int seg, start;
+    for (seg = 1; seg < len; seg += seg) {
+        for (start = 0; start < len; start += seg * 2) {
+            int low = start, mid = min(start + seg, len), high = min(start + seg * 2, len);
+            int k = low;
+            int start1 = low, end1 = mid;
+            int start2 = mid, end2 = high;
+            while (start1 < end1 && start2 < end2)
+                b[k++] = a[start1] < a[start2] ? a[start1++] : a[start2++];
+            while (start1 < end1)
+                b[k++] = a[start1++];
+            while (start2 < end2)
+                b[k++] = a[start2++];
+        }
+        int *temp = a;
+        a = b;
+        b = temp;
+    }
+    if (a != arr) {
+        int i;
+        for (i = 0; i < len; i++)
+            b[i] = a[i];
+        b = a;
+    }
+    free(b);
+}
+
+// 希尔排序
 void shellSort(int a, int b, int c)
 {
 
