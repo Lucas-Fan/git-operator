@@ -2,7 +2,7 @@
  * @Author: fanzy3 fanzy3@asiainfo.com
  * @Date: 2022-11-13 22:08:04
  * @LastEditors: fanzy3 fanzy3@asiainfo.com
- * @LastEditTime: 2022-11-13 22:13:13
+ * @LastEditTime: 2022-11-13 22:27:07
  * @FilePath: /git-operator/function.c
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -61,14 +61,18 @@ int partition(int arr[], int start, int end)
    while (li < ri)
    {
       while (li < ri && arr[ri] > temp)
+      {
          ri--;
+      }
       if (li < ri)
       {
          arr[li] = arr[ri];
          li++;
       }
       while (li < ri && arr[li] < temp)
+      {
          li++;
+      }
       if (li < ri)
       {
          arr[ri] = arr[li];
@@ -87,4 +91,67 @@ void quick_sort(int arr[], int start, int end)
       quick_sort(arr, start, index - 1);
       quick_sort(arr, index + 1, end);
    }
+}
+
+// 希尔排序
+void shellSort(int a, int b, int c)
+{
+
+   int arr[] = {1, 5, 3, 9, 7};
+   int len = 5;
+
+   int gap, i, j;
+   int temp;
+
+   for (gap = len / 2; gap >= 1; gap /= 2) //第一个间隔为len/2,然后不断缩小
+   {
+      //对每一个下标大于gap的元素进行遍历(0-(gap-1)是每一个子序列的首个有序表)
+      for (i = gap; i < len; i++)
+      {
+         temp = arr[i]; //将要插入的值赋值给temp,因为它所处的位置可能被覆盖
+         for (j = i - gap; arr[j] > temp && j >= 0; j -= gap)
+         {                         //i所处的子序列:i  i-gap  i-2gap i-n*gap( i-n*gap  >= 0)
+            arr[j + gap] = arr[j]; //arr[j]若大于要插入的值则将位置后移
+         }
+         //无论是arr[j]<temp还是j<0了,都将temp插入到arr[j]这一个子序列的后一个位置(j+gap)
+         arr[j + gap] = temp; 
+      }
+   }
+
+   //打印数组
+   for (int i = 0; i < len; i++)
+      printf("%d\t", arr[i]);
+}
+
+// 并归排序
+void merge_sort(int arr[], int len) {
+    int *a = arr;
+    int *b = (int *) malloc(len * sizeof(int));
+    int seg, start;
+    for (seg = 1; seg < len; seg += seg) {
+        for (start = 0; start < len; start += seg * 2) {
+            int low = start;
+            int mid = min(start + seg, len);
+            int high = min(start + seg * 2, len);
+            int k = low;
+            int start1 = low, end1 = mid;
+            int start2 = mid, end2 = high;
+            while (start1 < end1 && start2 < end2)
+                b[k++] = a[start1] < a[start2] ? a[start1++] : a[start2++];
+            while (start1 < end1)
+                b[k++] = a[start1++];
+            while (start2 < end2)
+                b[k++] = a[start2++];
+        }
+        int *temp = a;
+        a = b;
+        b = temp;
+    }
+    if (a != arr) {
+        int i;
+        for (i = 0; i < len; i++)
+            b[i] = a[i];
+        b = a;
+    }
+    free(b);
 }
